@@ -2,11 +2,11 @@
 const carousel = document.getElementById("carousel");
 
 const AlienDatas = [
-    { type: "image", src: "page.jpg" },
-    { type: "image", src: "page.jpg" },
-    { type: "image", src: "page.jpg" },
-    { type: "image", src: "page.jpg" },
-    { type: "image", src: "page.jpg" }
+    { type: "image", src: "doublePage.jpg"},
+    { type: "image", src: "page.png", gif: "test.gif" },
+    { type: "image", src: "page.png" },
+    { type: "image", src: "page.png" },
+    { type: "image", src: "page.png" }
 ];
 
 /*AlienDatas.forEach(data => {
@@ -36,11 +36,17 @@ function AddCarouselPages(project) {
             const img = document.createElement("img");
             img.src = data.src;
             page.append(img);
+            if (data.gif) {
+                const gif = document.createElement("img");
+                gif.src = data.gif;
+                gif.className = "gif";
+                page.append(gif);
+            }
         }
 
         carousel.appendChild(page);
     });
-    //updateCarousel();
+    updateCarousel();
 }
 
 let currentIndex = 0;
@@ -69,10 +75,10 @@ function updateCarousel() {
         else {
             // cartes à gauche/droite
             const translateX = offset * 220;
-            const rotateY = offset * -30;
+            const rotateY = offset;
             const scale =  1 - 0.2 * Math.abs(offset);
             const indexOffset = Math.abs(offset);
-            const brightnessValue = 0.7 / Math.abs(offset);
+            const brightnessValue = 0.5 / Math.abs(offset);
 
             page.style.transform = `translate(-50%, 0) translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`;
             page.style.filter = `brightness(${brightnessValue})`;
