@@ -9,7 +9,7 @@ const AlienDatas = [
     { type: "image", src: "page.jpg" }
 ];
 
-AlienDatas.forEach(data => {
+/*AlienDatas.forEach(data => {
     const page = document.createElement("div");
     page.className = "page";
 
@@ -20,13 +20,36 @@ AlienDatas.forEach(data => {
     }
 
     carousel.appendChild(page);
-});
+});*/
+
+function ResetCarousel() {
+    carousel.removeChild();
+    updateCarousel();
+}
+
+function AddCarouselPages(project) {
+    project.forEach(data => {
+        const page = document.createElement("div");
+        page.className = "page";
+
+        if (data.type === "image") {
+            const img = document.createElement("img");
+            img.src = data.src;
+            page.append(img);
+        }
+
+        carousel.appendChild(page);
+    });
+    //updateCarousel();
+}
 
 let currentIndex = 0;
-const pages = document.querySelectorAll(".page");
 
 function updateCarousel() {
+    const pages = document.querySelectorAll(".page");
     const total = pages.length;
+
+    console.log(currentIndex);
 
     pages.forEach((page, i) => {
         let offset = (i - currentIndex + total) % total;
@@ -60,13 +83,16 @@ function updateCarousel() {
 }
 
 document.getElementById("prev").addEventListener("click", () => {
-    currentIndex = (currentIndex + 1 + pages.length) % pages.length;
-    updateCarousel();
-})
-
-document.getElementById("next").addEventListener("click", () => {
+    const pages = document.querySelectorAll(".page");
     currentIndex = (currentIndex - 1 + pages.length) % pages.length;
     updateCarousel();
 })
 
+document.getElementById("next").addEventListener("click", () => {
+    const pages = document.querySelectorAll(".page");
+    currentIndex = (currentIndex + 1 + pages.length) % pages.length;
+    updateCarousel();
+})
+
+AddCarouselPages(AlienDatas);
 updateCarousel();
