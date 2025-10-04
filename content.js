@@ -2,25 +2,12 @@
 const carousel = document.getElementById("carousel");
 
 const AlienDatas = [
-    { type: "image", src: "doublePage.jpg"},
+    { type: "video", src: "doublePage.png", class: "double-page"},
     { type: "image", src: "page.png", gif: "test.gif" },
     { type: "image", src: "page.png" },
     { type: "image", src: "page.png" },
     { type: "image", src: "page.png" }
 ];
-
-/*AlienDatas.forEach(data => {
-    const page = document.createElement("div");
-    page.className = "page";
-
-    if (data.type === "image") {
-        const img = document.createElement("img");
-        img.src = data.src;
-        page.append(img);
-    }
-
-    carousel.appendChild(page);
-});*/
 
 function ResetCarousel() {
     carousel.removeChild();
@@ -28,22 +15,33 @@ function ResetCarousel() {
 }
 
 function AddCarouselPages(project) {
+    carousel.innerHTML = "";
+
     project.forEach(data => {
         const page = document.createElement("div");
         page.className = "page";
 
-        if (data.type === "image") {
-            const img = document.createElement("img");
-            img.src = data.src;
-            page.append(img);
-            if (data.gif) {
-                const gif = document.createElement("img");
-                gif.src = data.gif;
-                gif.className = "gif";
-                page.append(gif);
-            }
+        const img = document.createElement("img");
+        img.src = data.src;
+
+        if (data.class) {
+            page.classList.add(data.class);
         }
 
+        page.append(img);
+
+        if (data.gif) {
+            const gif = document.createElement("img");
+            gif.src = data.gif;
+            gif.className = "gif";
+            page.appendChild(gif);
+        }
+
+        /*else if (data.type === "video")
+        {
+                img.className = data.class;
+            }*/
+        
         carousel.appendChild(page);
     });
     updateCarousel();
@@ -54,8 +52,6 @@ let currentIndex = 0;
 function updateCarousel() {
     const pages = document.querySelectorAll(".page");
     const total = pages.length;
-
-    console.log(currentIndex);
 
     pages.forEach((page, i) => {
         let offset = (i - currentIndex + total) % total;
@@ -70,6 +66,10 @@ function updateCarousel() {
             page.style.opacity = "1";
             page.style.zIndex = total;
             page.style.filter = "brightness(1)";
+
+            if (page.classList.contains("double-page")) {
+                page.classList.remove("folded");
+            }
         }
 
         else {
@@ -81,6 +81,12 @@ function updateCarousel() {
             const brightnessValue = 0.5 / Math.abs(offset);
 
             page.style.transform = `translate(-50%, 0) translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`;
+
+            if (page.classList.contains("double-page") && !page.classList.contains("folded")) {
+                page.classList.add("folded");
+                page.style.transform = `translate(-50%, 0) translateX(${translateX}px) scale(${scale}) rotateY(-10deg)`;
+            }
+
             page.style.filter = `brightness(${brightnessValue})`;
             page.style.opacity = "1";
             page.style.zIndex = total - indexOffset;
