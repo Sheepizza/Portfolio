@@ -2,7 +2,7 @@
 const carousel = document.getElementById("carousel");
 
 const AlienDatas = [
-    { type: "video", src: "doublePage.png", class: "double-page"},
+    { type: "video", src: "doublePage.png", srcVid: "Trailer Vr.mp4"},
     { type: "image", src: "page.png", gif: "test.gif" },
     { type: "image", src: "page.png" },
     { type: "image", src: "page.png" },
@@ -24,11 +24,37 @@ function AddCarouselPages(project) {
         const img = document.createElement("img");
         img.src = data.src;
 
-        if (data.class) {
-            page.classList.add(data.class);
-        }
-
         page.append(img);
+
+        if (data.type === "video") {
+            page.classList.add("double-page");
+            const video = document.createElement("video");
+            video.src = data.srcVid;
+            video.className = "video";
+            video.autoplay = true;
+            video.muted = true;
+            video.playsInline = true;
+
+            page.appendChild(video);
+
+            const progressBar = document.createElement("input");
+            progressBar.type = "range";
+            progressBar.value = "0";
+            progressBar.min = "0";
+            progressBar.max = "100";
+
+            page.appendChild(progressBar);
+
+            video.ontimeupdate = () => {
+                const progress = (video.currentTime / video.duration) * 100;
+                progressBar.value = progress;
+            }
+
+            progressBar.oninput = () => {
+                const time = (progressBar.value / 100) * video.duration;
+                video.currentTime = time;
+            }
+        }
 
         if (data.gif) {
             const gif = document.createElement("img");
@@ -68,6 +94,8 @@ function updateCarousel() {
             page.style.filter = "brightness(1)";
 
             if (page.classList.contains("double-page")) {
+                const video = page.getElementsByTagName("video")[0];
+                video.play();
                 page.classList.remove("folded");
             }
         }
@@ -82,9 +110,21 @@ function updateCarousel() {
 
             page.style.transform = `translate(-50%, 0) translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`;
 
-            if (page.classList.contains("double-page") && !page.classList.contains("folded")) {
+            if (page.classList.contains("double-page") && !page.classList.contains("folded"))
+            {
+                const video = page.getElementsByTagName("video")[0];
+                video.pause();
+                video.muted = true;
                 page.classList.add("folded");
                 page.style.transform = `translate(-50%, 0) translateX(${translateX}px) scale(${scale}) rotateY(-10deg)`;
+            }
+
+            if (page.getElementsByClassName("gif").length > 0)
+            {
+                //Convertir GIF en video
+
+                //const gif = page.getElementsByClassName("gif")[0];
+                //gif.pause();
             }
 
             page.style.filter = `brightness(${brightnessValue})`;
