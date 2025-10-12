@@ -15,7 +15,7 @@
     width: 100vw;
     height: 100vh;
     background-color: #000000;
-    perspective: 1000px;
+    top: -4px;
 }
 
 #carousel {
@@ -51,14 +51,12 @@
         top: 12.5%;
     }
 
-    .page input {
-        height: 17%;
-        position: absolute;
-        width: 93.5%;
-        left: 3%;
-        top: 78.7%;
-        transform: none;
-    }
+#video-overlay {
+    position: fixed;
+    pointer-events: all;
+    z-index: 100;
+    display: none;
+}
 
 .double-page {
     width: 840px;

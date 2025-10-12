@@ -3,7 +3,7 @@ const carousel = document.getElementById("carousel");
 
 const AlienDatas = [
     { type: "video", src: "doublePage.png", srcVid: "Trailer Vr.mp4"},
-    { type: "image", src: "page.png", gif: "test.gif" },
+    { type: "image", src: "page.png", gif: "test.mp4" },
     { type: "image", src: "page.png" },
     { type: "image", src: "page.png" },
     { type: "image", src: "page.png" }
@@ -31,46 +31,32 @@ function AddCarouselPages(project) {
             const video = document.createElement("video");
             video.src = data.srcVid;
             video.className = "video";
-            video.autoplay = true;
             video.muted = true;
             video.playsInline = true;
+            video.controls = true;
 
-            page.appendChild(video);
-
-            const progressBar = document.createElement("input");
-            progressBar.type = "range";
-            progressBar.value = "0";
-            progressBar.min = "0";
-            progressBar.max = "100";
-
-            page.appendChild(progressBar);
-
-            video.ontimeupdate = () => {
-                const progress = (video.currentTime / video.duration) * 100;
-                progressBar.value = progress;
-            }
-
-            progressBar.oninput = () => {
-                const time = (progressBar.value / 100) * video.duration;
-                video.currentTime = time;
-            }
+            page.appendChild(video);    
         }
 
         if (data.gif) {
-            const gif = document.createElement("img");
+            const gif = document.createElement("video");
             gif.src = data.gif;
+            gif.autoplay = true;
+            gif.muted = true;
+            gif.loop = true;
             gif.className = "gif";
             page.appendChild(gif);
         }
-
-        /*else if (data.type === "video")
-        {
-                img.className = data.class;
-            }*/
         
         carousel.appendChild(page);
     });
     updateCarousel();
+}
+
+function projectVideo(video) {
+    const overlay = document.getElementById("video-overlay");
+    const videoRect = video.getBoundingClientRect();
+
 }
 
 let currentIndex = 0;
@@ -94,9 +80,12 @@ function updateCarousel() {
             page.style.filter = "brightness(1)";
 
             if (page.classList.contains("double-page")) {
-                const video = page.getElementsByTagName("video")[0];
-                video.play();
                 page.classList.remove("folded");
+            }
+
+            if (page.getElementsByClassName("gif").length > 0) {
+                const gif = page.getElementsByClassName("gif")[0];
+                gif.play();
             }
         }
 
@@ -121,10 +110,8 @@ function updateCarousel() {
 
             if (page.getElementsByClassName("gif").length > 0)
             {
-                //Convertir GIF en video
-
-                //const gif = page.getElementsByClassName("gif")[0];
-                //gif.pause();
+                const gif = page.getElementsByClassName("gif")[0];
+                gif.pause();
             }
 
             page.style.filter = `brightness(${brightnessValue})`;

@@ -18,7 +18,7 @@ const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // --- Lumière ---
-const light = new THREE.DirectionalLight(0xffffff, 10);
+const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(5, 5, 5);
 scene.add(light);
 
@@ -35,7 +35,7 @@ const loader = new GLTFLoader();
 let mixer;
 let animations = [];
 
-loader.load('./BookV2.glb', (gltf) => {
+loader.load('./BookTest.glb', (gltf) => {
     const model = gltf.scene;
     scene.add(model);
 
@@ -65,7 +65,7 @@ function animate() {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(scene.children, true);
 
-    if (intersects.length > 0) {
+    /*if (intersects.length > 0) {
         const obj = intersects[0].object;
         if (obj.name === "Bookmark" && lastIntersect !== obj) {
             const clip = THREE.AnimationClip.findByName(animations, "BookmarkSelected");
@@ -81,7 +81,7 @@ function animate() {
     }
     else {
         lastIntersect = null;
-    }
+    }*/
     renderer.render(scene, camera);
 }
 animate();
