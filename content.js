@@ -81,6 +81,8 @@ function updateCarousel() {
 
             if (page.classList.contains("double-page")) {
                 page.classList.remove("folded");
+                const video = page.getElementsByTagName("video")[0];
+                video.controls = true;
             }
 
             if (page.getElementsByClassName("gif").length > 0) {
@@ -103,7 +105,7 @@ function updateCarousel() {
             {
                 const video = page.getElementsByTagName("video")[0];
                 video.pause();
-                video.muted = true;
+                video.controls = false;
                 page.classList.add("folded");
                 page.style.transform = `translate(-50%, 0) translateX(${translateX}px) scale(${scale}) rotateY(-10deg)`;
             }

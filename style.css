@@ -59,13 +59,13 @@
 }
 
 .double-page {
-    width: 840px;
+    width: 56.4vw;
     transform-style: preserve-3d;
     overflow: hidden;
     transition: width 0.3s ease, transform 0.8s ease;
 }
     .double-page.folded {
-        width: 420px;
+        width: 28.2vw;
     }
 
 .btn {
