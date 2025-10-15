@@ -38,10 +38,10 @@
         box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
     .page .gif {
-        height: 30%;
+        height: 37.5%;
         position: absolute;
-        left: 6%;
-        top: 7%;
+        left: 5%;
+        bottom: 5%;
     }
 
     .page .video {

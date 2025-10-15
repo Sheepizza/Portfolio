@@ -3,10 +3,10 @@ const carousel = document.getElementById("carousel");
 
 const AlienDatas = [
     { type: "video", src: "doublePage.png", srcVid: "Trailer Vr.mp4"},
-    { type: "image", src: "page.png", gif: "test.mp4" },
-    { type: "image", src: "page.png" },
-    { type: "image", src: "page.png" },
-    { type: "image", src: "page.png" }
+    { type: "image", src: "TinyTale_R&D.png", gif: "test.mp4" },
+    { type: "image", src: "TinyTale_R&D.png" },
+    { type: "image", src: "TinyTale_R&D.png" },
+    { type: "image", src: "TinyTale_R&D.png" }
 ];
 
 function ResetCarousel() {
