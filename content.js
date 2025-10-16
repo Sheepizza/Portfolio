@@ -2,11 +2,11 @@
 const carousel = document.getElementById("carousel");
 
 const AlienDatas = [
-    { type: "video", src: "doublePage.png", srcVid: "Trailer Vr.mp4"},
-    { type: "image", src: "TinyTale_R&D.png", gif: "test.mp4" },
-    { type: "image", src: "TinyTale_R&D.png" },
-    { type: "image", src: "TinyTale_R&D.png" },
-    { type: "image", src: "TinyTale_R&D.png" }
+    { type: "video", src: "doublePage.png", srcVid: "TinyTale_Datas/TrailerTinyTale.mp4"},
+    { type: "image", src: "TinyTale_Datas/TinyTale_R&D.png", gif: "TinyTale_Datas/R&D.mp4" },
+    { type: "image", src: "TinyTale_Datas/TinyTale_CT.png", gif: "TinyTale_Datas/CT.mp4" },
+    { type: "image", src: "TinyTale_Datas/TinyTale_GP.png", gif: "TinyTale_Datas/GP.mp4" },
+    { type: "image", src: "TinyTale_Datas/TinyTale_CT.png" },
 ];
 
 function ResetCarousel() {

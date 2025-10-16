@@ -45,10 +45,10 @@
     }
 
     .page .video {
-        height: 76%;
+        height: 77%;
         position: absolute;
-        left: 3.3%;
-        top: 12.5%;
+        left: 3.1%;
+        top: 11.18%;
     }
 
 #video-overlay {
@@ -59,13 +59,13 @@
 }
 
 .double-page {
-    width: 56.4vw;
+    width: 56.4%;
     transform-style: preserve-3d;
     overflow: hidden;
     transition: width 0.3s ease, transform 0.8s ease;
 }
     .double-page.folded {
-        width: 28.2vw;
+        width: 28.2%;
     }
 
 .btn {
