@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-const projects = ["Alien", "Tiny", "Forge"];
+const projects = ["Alien", "TinyTale", "Forge"];
 
 // --- Scène ---
 const scene = new THREE.Scene();
