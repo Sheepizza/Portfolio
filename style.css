@@ -44,6 +44,13 @@
         bottom: 5%;
     }
 
+    .page .gif-sec {
+        height: 37.5%;
+        position: absolute;
+        left: 5%;
+        top: 15%;
+    }
+
     .page .video {
         height: 77%;
         position: absolute;

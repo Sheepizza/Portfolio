@@ -6,7 +6,7 @@ const TinyTaleDatas = [
     { type: "image", src: "TinyTale_Datas/TinyTale_R&D.png", gif: "TinyTale_Datas/R&D.mp4" },
     { type: "image", src: "TinyTale_Datas/TinyTale_CT.png", gif: "TinyTale_Datas/CT.mp4" },
     { type: "image", src: "TinyTale_Datas/TinyTale_GP.png", gif: "TinyTale_Datas/GP.mp4" },
-    { type: "image", src: "TinyTale_Datas/TinyTale_CT.png" },
+    { type: "image", src: "pageVisuels.png", gif: "TinyTale_Datas/Visuel1.mp4", gif_sec: "TinyTale_Datas/Visuel2.mp4" },
 ];
 
 const AlienDatas = [
@@ -54,6 +54,16 @@ function AddCarouselPages(project) {
             gif.loop = true;
             gif.className = "gif";
             page.appendChild(gif);
+
+            if (data.gif_sec) {
+                const gif_sec = document.createElement("video");
+                gif_sec.src = data.gif_sec;
+                gif_sec.autoplay = true;
+                gif_sec.muted = true;
+                gif_sec.loop = true;
+                gif_sec.className = "gif-sec";
+                page.appendChild(gif_sec);
+            }
         }
         
         carousel.appendChild(page);
