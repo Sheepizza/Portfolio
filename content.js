@@ -2,19 +2,15 @@
 const carousel = document.getElementById("carousel");
 
 const TinyTaleDatas = [
-    { type: "video", src: "doublePage.png", srcVid: "TinyTale_Datas/TrailerTinyTale.mp4"},
     { type: "image", src: "TinyTale_Datas/TinyTale_R&D.png", gif: "TinyTale_Datas/R&D.mp4" },
     { type: "image", src: "TinyTale_Datas/TinyTale_CT.png", gif: "TinyTale_Datas/CT.mp4" },
     { type: "image", src: "TinyTale_Datas/TinyTale_GP.png", gif: "TinyTale_Datas/GP.mp4" },
-    { type: "image", src: "pageVisuels.png", gif: "TinyTale_Datas/Visuel1.mp4", gif_sec: "TinyTale_Datas/Visuel2.mp4" },
 ];
 
 const AlienDatas = [
-    { type: "video", src: "doublePage.png", srcVid: "Alien_Datas/TrailerAlien.mp4" },
     { type: "image", src: "TinyTale_Datas/TinyTale_R&D.png", gif: "TinyTale_Datas/R&D.mp4" },
     { type: "image", src: "TinyTale_Datas/TinyTale_CT.png", gif: "TinyTale_Datas/CT.mp4" },
     { type: "image", src: "TinyTale_Datas/TinyTale_GP.png", gif: "TinyTale_Datas/GP.mp4" },
-    { type: "image", src: "TinyTale_Datas/TinyTale_CT.png" },
 ];
 
 function ResetCarousel() {
