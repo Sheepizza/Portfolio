@@ -8,10 +8,22 @@ const TinyTaleDatas = [
 ];
 
 const AlienDatas = [
-    { type: "image", src: "TinyTale_Datas/TinyTale_R&D.png", gif: "TinyTale_Datas/R&D.mp4" },
-    { type: "image", src: "TinyTale_Datas/TinyTale_CT.png", gif: "TinyTale_Datas/CT.mp4" },
-    { type: "image", src: "TinyTale_Datas/TinyTale_GP.png", gif: "TinyTale_Datas/GP.mp4" },
+    { type: "image", src: "Alien_Datas/Alien_R&D.png", gif: "Alien_Datas/R&D.mp4" },
+    { type: "image", src: "Alien_Datas/Alien_CT.png", gif: "Alien_Datas/CT.mp4" },
+    { type: "image", src: "Alien_Datas/Alien_GP.png", gif: "Alien_Datas/GP.mp4" },
 ];
+
+const FastForgeDatas = [
+    { type: "image", src: "FastForge_Datas/FastForge_R&D.png", gif: "FastForge_Datas/R&D.mp4" },
+    { type: "image", src: "FastForge_Datas/FastForge_CT.png", gif: "FastForge_Datas/CT.mp4" },
+    { type: "image", src: "FastForge_Datas/FastForge_GP.png", gif: "FastForge_Datas/GP.mp4" },
+];
+
+const projects = {
+    "TinyTale": TinyTaleDatas,
+    "Alien": AlienDatas,
+    "FastForge": FastForgeDatas
+};
 
 function ResetCarousel() {
     carousel.removeChild();
@@ -149,5 +161,17 @@ document.getElementById("next").addEventListener("click", () => {
     updateCarousel();
 })
 
-AddCarouselPages(TinyTaleDatas);
+document.getElementById("temp-TT").addEventListener("click", () => {
+    AddCarouselPages(projects["TinyTale"]);
+})
+
+document.getElementById("temp-FF").addEventListener("click", () => {
+    AddCarouselPages(projects["FastForge"]);
+})
+
+document.getElementById("temp-Alien").addEventListener("click", () => {
+    AddCarouselPages(projects["Alien"]);
+})
+
+AddCarouselPages(projects["TinyTale"]);
 updateCarousel();
