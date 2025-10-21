@@ -1,8 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-const projects = ["Alien", "TinyTale", "Forge"];
-
 // --- Scène ---
 const scene = new THREE.Scene();
 
@@ -94,8 +92,6 @@ window.addEventListener('resize', () => {
 });
 
 function openNewProject(projectName) {
-    if (projectName in projects) {
-        //Play open animation
-        //Update pages textures
-    }
+    //Play open animation
+    //Update pages textures
 }

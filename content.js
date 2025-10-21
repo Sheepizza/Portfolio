@@ -1,5 +1,15 @@
 
 const carousel = document.getElementById("carousel");
+const scrollBtn = document.getElementById("scroll-btn");
+let isAtBottom = false;
+
+const AboutMeDatas = [
+    { type: "image", src: "AboutMe_Datas/CTProg.png" },
+    { type: "image", src: "AboutMe_Datas/CT.png"},
+    { type: "image", src: "AboutMe_Datas/Cinema.png" },
+    { type: "image", src: "AboutMe_Datas/JeuVideo.png" },
+    { type: "image", src: "AboutMe_Datas/Prog.png" },
+];
 
 const TinyTaleDatas = [
     { type: "image", src: "TinyTale_Datas/TinyTale_R&D.png", gif: "TinyTale_Datas/R&D.mp4" },
@@ -20,10 +30,13 @@ const FastForgeDatas = [
 ];
 
 const projects = {
+    "AboutMe": AboutMeDatas,
     "TinyTale": TinyTaleDatas,
     "Alien": AlienDatas,
     "FastForge": FastForgeDatas
 };
+
+let currentIndex = 0;
 
 function ResetCarousel() {
     carousel.removeChild();
@@ -76,6 +89,7 @@ function AddCarouselPages(project) {
         
         carousel.appendChild(page);
     });
+    currentIndex = 0;
     updateCarousel();
 }
 
@@ -84,8 +98,6 @@ function projectVideo(video) {
     const videoRect = video.getBoundingClientRect();
 
 }
-
-let currentIndex = 0;
 
 function updateCarousel() {
     const pages = document.querySelectorAll(".page");
@@ -149,6 +161,38 @@ function updateCarousel() {
         });
 }
 
+function CheckScrollPos() {
+    const topOffset = document.documentElement.scrollTop;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    if (topOffset + windowHeight >= documentHeight - 100) {
+        isAtBottom = true;
+        scrollBtn.classList.add("rotate");
+    }
+    else {
+        isAtBottom = false;
+        scrollBtn.classList.remove("rotate");
+    }
+}
+
+scrollBtn.addEventListener("click", () => {
+    if (isAtBottom) {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+    else {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    }
+})
+
+window.addEventListener("scroll", CheckScrollPos);
+
 document.getElementById("prev").addEventListener("click", () => {
     const pages = document.querySelectorAll(".page");
     currentIndex = (currentIndex - 1 + pages.length) % pages.length;
@@ -173,5 +217,10 @@ document.getElementById("temp-Alien").addEventListener("click", () => {
     AddCarouselPages(projects["Alien"]);
 })
 
-AddCarouselPages(projects["TinyTale"]);
+document.getElementById("temp-abt").addEventListener("click", () => {
+    AddCarouselPages(projects["AboutMe"]);
+})
+
+CheckScrollPos();
+AddCarouselPages(projects["AboutMe"]);
 updateCarousel();

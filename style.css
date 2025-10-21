@@ -1,7 +1,6 @@
 ﻿body, html {
     margin: 0;
     padding: 0;
-    height: 100%;
     overflow-x: hidden;
 }
 
@@ -35,7 +34,7 @@
         max-height: 80vh;
         height: auto;
         margin: 0 auto;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        
     }
     .page .gif {
         height: 37.5%;
@@ -97,5 +96,22 @@
 #next {
     left: unset;
     right: 10%;
+}
+
+#scroll-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    transition: transform 0.2s ease;
+}
+
+#scroll-btn.rotate {
+    transform: rotate(180deg);
+}
+
+#scroll-btn:hover {
+    transform: scale(1.1);
 }
 
