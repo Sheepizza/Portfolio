@@ -17,28 +17,11 @@ const canvas = document.getElementById("bookCanvas");
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-// --- Lumière ---
-const light = new THREE.DirectionalLight(0xffc992, 1);
-light.position.set(0, 5, 0);
-scene.add(light);
-
-const lightR = new THREE.SpotLight(0x96b0ff, 5);
-lightR.position.set(0.6, 5, -5);
-lightR.penumbra = 0.3;
-lightR.castShadow = true;
-lightR.lookAt(0, 0, 0);
-scene.add(lightR);
-
-const lightL = new THREE.SpotLight(0xf3f8ff, 10);
-lightL.position.set(0.6, 5, 5);
-lightL.penumbra = 0.3;
-lightL.castShadow = true;
-lightL.lookAt(0, 0, 0);
-scene.add(lightL);
-
 // --- Texture ---
-//const textureLoader = new THREE.TextureLoader();
-//const texture = textureLoader.load("bois.jpg");
+const textureLoader = new THREE.TextureLoader();
+const texture = textureLoader.load("TestPaper.png");
+texture.flipY = false;
+texture.colorSpace = THREE.SRGBColorSpace;
 
 // --- Raycaster ---
 const raycaster = new THREE.Raycaster();
@@ -53,7 +36,7 @@ const loader = new GLTFLoader();
 let mixer;
 let animations = [];
 
-loader.load('./bookV0.1.glb', (gltf) => {
+loader.load('./book_V02.glb', (gltf) => {
     const model = gltf.scene;
     scene.add(model);
 
@@ -61,11 +44,21 @@ loader.load('./bookV0.1.glb', (gltf) => {
     animations = gltf.animations;
 
     if (animations.length > 0) {
-        const action = mixer.clipAction(animations[0]);
+        const action = mixer.clipAction(animations[4]);
         action.setLoop(THREE.LoopOnce);
         action.clampWhenFinished = true;
         action.play();
+
+        const action2 = mixer.clipAction(animations[1]);
+        action2.setLoop(THREE.LoopOnce);
+        action2.clampWhenFinished = true;
+        action2.play();
     }
+
+    model.getObjectByName("R_Pages").material.map = texture;
+    model.getObjectByName("R_Pages").material.needsUpdate = true;
+    model.getObjectByName("L_Pages").material.map = texture;
+    model.getObjectByName("L_Pages").material.needsUpdate = true;
 }, undefined, (err) => console.error(err));
 
 const clock = new THREE.Clock();
