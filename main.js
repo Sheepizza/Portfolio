@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
+import { projects, AddCarouselPages } from './content.js';
+
 // --- Scène ---
 const scene = new THREE.Scene();
 
@@ -28,86 +30,87 @@ contentTexture.colorSpace = THREE.SRGBColorSpace;
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2(9999, 9999);
 window.addEventListener('mousemove', (event) => {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    const rect = canvas.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    mouse.x = (x / rect.width) * 2 - 1;
+    mouse.y = -(y / rect.height) * 2 + 1;
 });
 
-// --- Loader ---
-const loader = new GLTFLoader();
 let mixer;
 let animations = [];
 let contentMaterial = null;
 
-loader.load('./book_V03.glb', (gltf) => {
-    const model = gltf.scene;
-    scene.add(model);
+async function init()
+{
+    // --- Loader ---
+    const loader = new GLTFLoader();
 
-    mixer = new THREE.AnimationMixer(model);
-    animations = gltf.animations;
+    await loader.load('./TestPages.glb', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
 
-    if (animations.length > 0) {
-        const action = mixer.clipAction(animations[1]);
-        action.setLoop(THREE.LoopOnce);
-        action.clampWhenFinished = true;
-        action.play();
+        mixer = new THREE.AnimationMixer(model);
+        animations = gltf.animations;
 
-        const action2 = mixer.clipAction(animations[2]);
-        action2.setLoop(THREE.LoopOnce);
-        action2.clampWhenFinished = true;
-        action2.play();
-    }
-}, undefined, (err) => console.error(err));
+        const noiseTexture = textureLoader.load('Noise_Mask.png');
+        noiseTexture.flipY = false;
 
-loader.load('./TestPages.glb', (gltf) => {
-    const model = gltf.scene;
-    scene.add(model);
+        gltf.scene.traverse((child) => {
+            if (child.isMesh && child.name === 'R_Decal') {
+                contentMaterial = child.material;
 
-    mixer = new THREE.AnimationMixer(model);
-    animations = gltf.animations;
+                contentMaterial.map = contentTexture;
 
-    const noiseTexture = textureLoader.load('Noise_Mask.png');
-    noiseTexture.flipY = false;
+                contentMaterial.alphaMap = noiseTexture;
+                contentMaterial.transparent = true;
+                contentMaterial.alphaTest = 1;
+                contentMaterial.depthWrite = false;
+                contentMaterial.needsUpdate = true;
 
-    gltf.scene.traverse((child) => {
-        if (child.isMesh && child.name === 'R_Decal') {
-            contentMaterial = child.material;
+            }
+        })
+    }, undefined, (err) => console.error(err));
 
-            contentMaterial.map = contentTexture;
+    await loader.load('./book_V03.glb', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
 
-            contentMaterial.alphaMap = noiseTexture;
-            contentMaterial.transparent = true;
-            contentMaterial.alphaTest = 1;
-            contentMaterial.depthWrite = false;
-            contentMaterial.needsUpdate = true;
+        mixer = new THREE.AnimationMixer(model);
+        animations = gltf.animations;
 
+        if (animations.length > 0) {
+            const action = mixer.clipAction(animations[1]);
+            action.setLoop(THREE.LoopOnce);
+            action.clampWhenFinished = true;
+            action.play();
+
+            const action2 = mixer.clipAction(animations[2]);
+            action2.setLoop(THREE.LoopOnce);
+            action2.clampWhenFinished = true;
+            action2.play();
         }
-    })
-}, undefined, (err) => console.error(err));
+    }, undefined, (err) => console.error(err));
+
+    gsap.to(camera.position, {
+        x: endCamPos.x,
+        y: endCamPos.y,
+        z: endCamPos.z,
+        duration: 3,
+        ease: "power2.inOut",
+        onUpdate: () => {
+            camera.lookAt(0, 0, 0);
+        }
+    });
+}
+
+init();
 
 const clock = new THREE.Clock();
 
 let lastIntersect = null;
-
-gsap.to(camera.position, {
-    x: endCamPos.x,
-    y: endCamPos.y,
-    z: endCamPos.z,
-    duration: 3,
-    ease: "power2.inOut",
-    onUpdate: () => {
-        camera.lookAt(0, 0, 0);
-    }
-});
-
-function revealContent() {
-    gsap.to(contentMaterial, {
-        alphaTest: -2,
-        duration: 7,
-        ease: "power1.inOut"
-    });
-}
-
-setTimeout(revealContent, 1000);
 
 function animate() {
     requestAnimationFrame(animate);
@@ -124,17 +127,18 @@ function animate() {
     if (intersects.length > 0) {
         const obj = intersects[0].object;
         console.log(obj.name);
-        //if (obj.name === "Bookmark" && lastIntersect !== obj) {
-        //    const clip = THREE.AnimationClip.findByName(animations, "BookmarkSelected");
-        //    if (clip) {
-        //        const action = mixer.clipAction(clip);
-        //        action.setLoop(THREE.LoopOnce);
-        //        action.clampWhenFinished = true;
-        //        if (!action.isRunning())
-        //            action.reset().setLoop(THREE.LoopOnce).play();
-        //    }
-        //}
-        //lastIntersect = obj;
+        if (obj.name === "Bookmark" && lastIntersect !== obj) {
+            const clip = THREE.AnimationClip.findByName(animations, "BookmarkSelected");
+            if (clip) {
+                const action = mixer.clipAction(clip);
+                action.setLoop(THREE.LoopOnce);
+                action.clampWhenFinished = true;
+                if (!action.isRunning())
+                    action.reset().setLoop(THREE.LoopOnce).play();
+            }
+            openNewProject(obj.name.substring(8));
+        }
+        lastIntersect = obj;
     }
     else {
         lastIntersect = null;
@@ -152,7 +156,21 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-function openNewProject(projectName) {
-    //Play open animation
-    //Update pages textures
+async function openNewProject(projectName) {
+    await contentRevelation(1);
+    AddCarouselPages(projects["TinyTale"]);
+    contentRevelation(0);
 }
+
+async function contentRevelation(alphaValue) {
+    await gsap.to(contentMaterial, {
+        alphaTest: alphaValue,
+        duration: 1,
+        ease: "power3.inOut",
+        onUpdate: () => {
+            console.log("AlphaTest: " + contentMaterial.alphaTest);
+        }
+    });
+}
+
+setTimeout(() => contentRevelation(0), 600);

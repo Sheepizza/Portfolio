@@ -29,7 +29,7 @@ const FastForgeDatas = [
     { type: "image", src: "FastForge_Datas/FastForge_GP.png", gif: "FastForge_Datas/GP.mp4" },
 ];
 
-const projects = {
+export const projects = {
     "AboutMe": AboutMeDatas,
     "TinyTale": TinyTaleDatas,
     "Alien": AlienDatas,
@@ -43,7 +43,7 @@ function ResetCarousel() {
     updateCarousel();
 }
 
-function AddCarouselPages(project) {
+export function AddCarouselPages(project) {
     carousel.innerHTML = "";
 
     project.forEach(data => {
