@@ -19,9 +19,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 // --- Texture ---
 const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load("TestPaper.png");
-texture.flipY = false;
-texture.colorSpace = THREE.SRGBColorSpace;
+const contentTexture = textureLoader.load("TestText.png");
+contentTexture.flipY = false;
+contentTexture.colorSpace = THREE.SRGBColorSpace;
+
 
 // --- Raycaster ---
 const raycaster = new THREE.Raycaster();
@@ -35,8 +36,9 @@ window.addEventListener('mousemove', (event) => {
 const loader = new GLTFLoader();
 let mixer;
 let animations = [];
+let contentMaterial = null;
 
-loader.load('./book_V02.glb', (gltf) => {
+loader.load('./book_V03.glb', (gltf) => {
     const model = gltf.scene;
     scene.add(model);
 
@@ -44,21 +46,42 @@ loader.load('./book_V02.glb', (gltf) => {
     animations = gltf.animations;
 
     if (animations.length > 0) {
-        const action = mixer.clipAction(animations[4]);
+        const action = mixer.clipAction(animations[1]);
         action.setLoop(THREE.LoopOnce);
         action.clampWhenFinished = true;
         action.play();
 
-        const action2 = mixer.clipAction(animations[1]);
+        const action2 = mixer.clipAction(animations[2]);
         action2.setLoop(THREE.LoopOnce);
         action2.clampWhenFinished = true;
         action2.play();
     }
+}, undefined, (err) => console.error(err));
 
-    model.getObjectByName("R_Pages").material.map = texture;
-    model.getObjectByName("R_Pages").material.needsUpdate = true;
-    model.getObjectByName("L_Pages").material.map = texture;
-    model.getObjectByName("L_Pages").material.needsUpdate = true;
+loader.load('./TestPages.glb', (gltf) => {
+    const model = gltf.scene;
+    scene.add(model);
+
+    mixer = new THREE.AnimationMixer(model);
+    animations = gltf.animations;
+
+    const noiseTexture = textureLoader.load('Noise_Mask.png');
+    noiseTexture.flipY = false;
+
+    gltf.scene.traverse((child) => {
+        if (child.isMesh && child.name === 'R_Decal') {
+            contentMaterial = child.material;
+
+            contentMaterial.map = contentTexture;
+
+            contentMaterial.alphaMap = noiseTexture;
+            contentMaterial.transparent = true;
+            contentMaterial.alphaTest = 1;
+            contentMaterial.depthWrite = false;
+            contentMaterial.needsUpdate = true;
+
+        }
+    })
 }, undefined, (err) => console.error(err));
 
 const clock = new THREE.Clock();
@@ -75,6 +98,16 @@ gsap.to(camera.position, {
         camera.lookAt(0, 0, 0);
     }
 });
+
+function revealContent() {
+    gsap.to(contentMaterial, {
+        alphaTest: -2,
+        duration: 7,
+        ease: "power1.inOut"
+    });
+}
+
+setTimeout(revealContent, 1000);
 
 function animate() {
     requestAnimationFrame(animate);
