@@ -4,6 +4,8 @@ const scrollBtn = document.getElementById("scroll-btn");
 let isAtBottom = false;
 
 const AboutMeDatas = [
+    { type: "page", src: "AboutMe_Datas/LPage.png" },
+    { type: "page", src: "AboutMe_Datas/RPage.png" },
     { type: "image", src: "AboutMe_Datas/CTProg.png" },
     { type: "image", src: "AboutMe_Datas/CT.png"},
     { type: "image", src: "AboutMe_Datas/Cinema.png" },
@@ -12,18 +14,24 @@ const AboutMeDatas = [
 ];
 
 const TinyTaleDatas = [
+    { type: "page", src: "TinyTale_Datas/LPage.png" },
+    { type: "page", src: "TinyTale_Datas/RPage.png" },
     { type: "image", src: "TinyTale_Datas/TinyTale_R&D.png", gif: "TinyTale_Datas/R&D.mp4" },
     { type: "image", src: "TinyTale_Datas/TinyTale_CT.png", gif: "TinyTale_Datas/CT.mp4" },
     { type: "image", src: "TinyTale_Datas/TinyTale_GP.png", gif: "TinyTale_Datas/GP.mp4" },
 ];
 
 const AlienDatas = [
+    { type: "page", src: "Alien_Datas/LPage.png" },
+    { type: "page", src: "Alien_Datas/RPage.png" },
     { type: "image", src: "Alien_Datas/Alien_R&D.png", gif: "Alien_Datas/R&D.mp4" },
     { type: "image", src: "Alien_Datas/Alien_CT.png", gif: "Alien_Datas/CT.mp4" },
     { type: "image", src: "Alien_Datas/Alien_GP.png", gif: "Alien_Datas/GP.mp4" },
 ];
 
 const FastForgeDatas = [
+    { type: "page", src: "FastForge_Datas/LPage.png" },
+    { type: "page", src: "FastForge_Datas/RPage.png" },
     { type: "image", src: "FastForge_Datas/FastForge_R&D.png", gif: "FastForge_Datas/R&D.mp4" },
     { type: "image", src: "FastForge_Datas/FastForge_CT.png", gif: "FastForge_Datas/CT.mp4" },
     { type: "image", src: "FastForge_Datas/FastForge_GP.png", gif: "FastForge_Datas/GP.mp4" },
@@ -36,6 +44,11 @@ export const projects = {
     "FastForge": FastForgeDatas
 };
 
+export function getPages(project)
+{
+    return [project[0].src, project[1].src];
+}
+
 let currentIndex = 0;
 
 function ResetCarousel() {
@@ -47,47 +60,49 @@ export function AddCarouselPages(project) {
     carousel.innerHTML = "";
 
     project.forEach(data => {
-        const page = document.createElement("div");
-        page.className = "page";
+        if (data.type !== "page") {
+            const page = document.createElement("div");
+            page.className = "page";
 
-        const img = document.createElement("img");
-        img.src = data.src;
+            const img = document.createElement("img");
+            img.src = data.src;
 
-        page.append(img);
+            page.append(img);
 
-        if (data.type === "video") {
-            page.classList.add("double-page");
-            const video = document.createElement("video");
-            video.src = data.srcVid;
-            video.className = "video";
-            video.muted = true;
-            video.playsInline = true;
-            video.controls = true;
+            if (data.type === "video") {
+                page.classList.add("double-page");
+                const video = document.createElement("video");
+                video.src = data.srcVid;
+                video.className = "video";
+                video.muted = true;
+                video.playsInline = true;
+                video.controls = true;
 
-            page.appendChild(video);    
-        }
-
-        if (data.gif) {
-            const gif = document.createElement("video");
-            gif.src = data.gif;
-            gif.autoplay = true;
-            gif.muted = true;
-            gif.loop = true;
-            gif.className = "gif";
-            page.appendChild(gif);
-
-            if (data.gif_sec) {
-                const gif_sec = document.createElement("video");
-                gif_sec.src = data.gif_sec;
-                gif_sec.autoplay = true;
-                gif_sec.muted = true;
-                gif_sec.loop = true;
-                gif_sec.className = "gif-sec";
-                page.appendChild(gif_sec);
+                page.appendChild(video);
             }
+
+            if (data.gif) {
+                const gif = document.createElement("video");
+                gif.src = data.gif;
+                gif.autoplay = true;
+                gif.muted = true;
+                gif.loop = true;
+                gif.className = "gif";
+                page.appendChild(gif);
+
+                if (data.gif_sec) {
+                    const gif_sec = document.createElement("video");
+                    gif_sec.src = data.gif_sec;
+                    gif_sec.autoplay = true;
+                    gif_sec.muted = true;
+                    gif_sec.loop = true;
+                    gif_sec.className = "gif-sec";
+                    page.appendChild(gif_sec);
+                }
+            }
+
+            carousel.appendChild(page);
         }
-        
-        carousel.appendChild(page);
     });
     currentIndex = 0;
     updateCarousel();

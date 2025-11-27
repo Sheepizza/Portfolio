@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-import { projects, AddCarouselPages } from './content.js';
+import { projects, AddCarouselPages, getPages } from './content.js';
 
 // --- Scène ---
 const scene = new THREE.Scene();
@@ -41,35 +41,42 @@ window.addEventListener('mousemove', (event) => {
 
 let mixer;
 let animations = [];
-let contentMaterial = null;
+let rContentMaterial = null;
+let lContentMaterial = null;
+const noiseTexture = textureLoader.load('Noise_Mask.png');
 
 async function init()
 {
     // --- Loader ---
     const loader = new GLTFLoader();
 
-    await loader.load('./TestPages.glb', (gltf) => {
+    await loader.load('./Pages.glb', (gltf) => {
         const model = gltf.scene;
         scene.add(model);
 
         mixer = new THREE.AnimationMixer(model);
         animations = gltf.animations;
 
-        const noiseTexture = textureLoader.load('Noise_Mask.png');
-        noiseTexture.flipY = false;
-
         gltf.scene.traverse((child) => {
             if (child.isMesh && child.name === 'R_Decal') {
-                contentMaterial = child.material;
+                rContentMaterial = child.material;
 
-                contentMaterial.map = contentTexture;
+                rContentMaterial.map = contentTexture;
+                rContentMaterial.alphaMap = noiseTexture;
+                rContentMaterial.transparent = true;
+                rContentMaterial.depthWrite = false;
+                rContentMaterial.alphaTest = 1;
+                rContentMaterial.needsUpdate = true;
+            }
+            else if (child.isMesh && child.name === 'L_Decal') {
+                lContentMaterial = child.material;
 
-                contentMaterial.alphaMap = noiseTexture;
-                contentMaterial.transparent = true;
-                contentMaterial.alphaTest = 1;
-                contentMaterial.depthWrite = false;
-                contentMaterial.needsUpdate = true;
-
+                lContentMaterial.map = contentTexture;
+                lContentMaterial.alphaMap = noiseTexture;
+                lContentMaterial.transparent = true;
+                lContentMaterial.depthWrite = false;
+                lContentMaterial.alphaTest = 1;
+                lContentMaterial.needsUpdate = true;
             }
         })
     }, undefined, (err) => console.error(err));
@@ -91,6 +98,7 @@ async function init()
             action2.setLoop(THREE.LoopOnce);
             action2.clampWhenFinished = true;
             action2.play();
+
         }
     }, undefined, (err) => console.error(err));
 
@@ -112,6 +120,8 @@ const clock = new THREE.Clock();
 
 let lastIntersect = null;
 
+const clickListeners = [];
+
 function animate() {
     requestAnimationFrame(animate);
 
@@ -127,7 +137,7 @@ function animate() {
     if (intersects.length > 0) {
         const obj = intersects[0].object;
         console.log(obj.name);
-        if (obj.name === "Bookmark" && lastIntersect !== obj) {
+        if (obj.name.substring(0, 8) === "Bookmark" && lastIntersect !== obj) {
             const clip = THREE.AnimationClip.findByName(animations, "BookmarkSelected");
             if (clip) {
                 const action = mixer.clipAction(clip);
@@ -136,7 +146,13 @@ function animate() {
                 if (!action.isRunning())
                     action.reset().setLoop(THREE.LoopOnce).play();
             }
-            openNewProject(obj.name.substring(8));
+            document.body.style.cursor = 'pointer';
+            addClickListener(() => openNewProject(obj.name.substring(8)));
+        }
+        else if (obj.name.substring(0, 8) !== "Bookmark")
+        {
+            document.body.style.cursor = 'default';
+            resetClickListeners();
         }
         lastIntersect = obj;
     }
@@ -156,21 +172,82 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-async function openNewProject(projectName) {
-    await contentRevelation(1);
-    AddCarouselPages(projects["TinyTale"]);
-    contentRevelation(0);
+function updatePages(project)
+{
+    const pages = getPages(project);
+
+    const rContentTexture = textureLoader.load(pages[1]);
+    rContentTexture.flipY = false;
+    rContentTexture.colorSpace = THREE.SRGBColorSpace;
+
+    rContentMaterial.map = rContentTexture;
+    rContentMaterial.needsUpdate = true;
+
+    const lContentTexture = textureLoader.load(pages[0]);
+    lContentTexture.flipY = false;
+    lContentTexture.colorSpace = THREE.SRGBColorSpace;
+
+    lContentMaterial.map = lContentTexture;
+    lContentMaterial.needsUpdate = true;
 }
 
-async function contentRevelation(alphaValue) {
-    await gsap.to(contentMaterial, {
-        alphaTest: alphaValue,
-        duration: 1,
-        ease: "power3.inOut",
-        onUpdate: () => {
-            console.log("AlphaTest: " + contentMaterial.alphaTest);
-        }
+function addClickListener(f)
+{
+    clickListeners.push(f);
+    window.addEventListener('click', f);
+}
+
+function resetClickListeners() {
+    clickListeners.forEach((f) => {
+        window.removeEventListener('click', f);
     });
 }
 
-setTimeout(() => contentRevelation(0), 600);
+async function openNewProject(projectName) {
+    await contentRevelation(1);
+    updatePages(projects[projectName]);
+    AddCarouselPages(projects[projectName]);
+    await contentRevelation(0);
+}
+
+async function contentRevelation(alphaValue) {
+    if (alphaValue === 1)
+    {
+        rContentMaterial.alphaMap = noiseTexture;
+
+        rContentMaterial.needsUpdate = true;
+
+        lContentMaterial.alphaMap = noiseTexture;
+
+        lContentMaterial.needsUpdate = true;
+
+    }
+
+    gsap.to(rContentMaterial, {
+        alphaTest: alphaValue,
+        duration: 1,
+        ease: "power3.inOut"
+    });
+
+    await gsap.to(lContentMaterial, {
+        alphaTest: alphaValue,
+        duration: 1,
+        ease: "power3.inOut"
+    });
+
+    if (alphaValue === 0)
+    {
+        rContentMaterial.alphaMap = null;
+
+        rContentMaterial.needsUpdate = true;
+
+        lContentMaterial.alphaMap = null;
+
+        lContentMaterial.needsUpdate = true;
+    }
+}
+
+setTimeout(() => {
+    updatePages(projects["AboutMe"]);
+    contentRevelation(0);
+}, 1000);
