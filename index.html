@@ -1,50 +1,429 @@
-﻿<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Samuel Lucq - Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Portfolio Page</title>
+    <meta property="og:title" content="Portfolio Page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta property="twitter:card" content="summary_large_image" />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
-    <!-- ES module shims -->
-    <script async src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
-
-    <!-- Import map -->
-    <script type="importmap">
-        {
-          "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.156.0/build/three.module.js",
-            "three/examples/jsm/loaders/GLTFLoader.js": "https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/GLTFLoader.js"
-          }
+    <style data-tag="reset-style-sheet">
+        html {
+            line-height: 1.15;
         }
-    </script>
+
+        body {
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        p, li, ul, pre, div, h1, h2, h3, h4, h5, h6, figure, blockquote, figcaption {
+            margin: 0;
+            padding: 0;
+        }
+
+        button {
+            background-color: transparent;
+        }
+
+        button, input, optgroup, select, textarea {
+            font-family: inherit;
+            font-size: 100%;
+            line-height: 1.15;
+            margin: 0;
+        }
+
+        button, select {
+            text-transform: none;
+        }
+
+        button, [type="button"], [type="reset"], [type="submit"] {
+            -webkit-appearance: button;
+            color: inherit;
+        }
+
+            button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner {
+                border-style: none;
+                padding: 0;
+            }
+
+            button:-moz-focus, [type="button"]:-moz-focus, [type="reset"]:-moz-focus, [type="submit"]:-moz-focus {
+                outline: 1px dotted ButtonText;
+            }
+
+        a {
+            color: inherit;
+            text-decoration: inherit;
+        }
+
+        pre {
+            white-space: normal;
+        }
+
+        input {
+            padding: 2px 4px;
+        }
+
+        img {
+            display: block;
+        }
+
+        details {
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        [data-thq="accordion"] [data-thq="accordion-content"] {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            padding: 0;
+        }
+
+        [data-thq="accordion"] details[data-thq="accordion-trigger"][open] + [data-thq="accordion-content"] {
+            max-height: 1000vh;
+        }
+
+        details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {
+            transform: rotate(180deg);
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+    </style>
+    <style data-tag="default-style-sheet">
+        html {
+            font-family: Arial;
+            font-size: 16px;
+        }
+
+        body {
+            font-weight: 400;
+            font-style: normal;
+            text-decoration: none;
+            text-transform: none;
+            letter-spacing: normal;
+            line-height: 1.55;
+            color: var(--dl-color-gray-black);
+            background: var(--dl-color-gray-white);
+            fill: var(--dl-color-gray-black);
+        }
+    </style>
+    <link rel="stylesheet"
+          href="https://unpkg.com/animate.css@4.1.1/animate.css" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&amp;display=swap"
+          data-tag="font" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+          data-tag="font" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&amp;display=swap"
+          data-tag="font" />
+    <link rel="stylesheet"
+          href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
-    <canvas id="bookCanvas"></canvas>
+    <link rel="stylesheet" href="./style.css" />
+    <div>
+        <link href="./index.css" rel="stylesheet" />
 
-    <div id="temp-btn-div">
-        <button id="temp-abt">About</button>
-        <button id="temp-TT">TT</button>
-        <button id="temp-FF">FF</button>
-        <button id="temp-Alien">Alien</button>
-        Boutons placeholder simulant les marques pages (changement de projet)
-        L'idée est que sur le livre il y a un résumé du projet actuel (À propos, Tiny Tale...) et qu'en descendant, on arrive sur le carrousel de page qui va expliquer plus en détail ma participation au projet et ce que j'ai appris. L'anim du livre est bientôt fini et quand il sera fini j'aurais juste à appliquer des alphas pour "écrire" dessus. (Par la suite l'ajout de feedbacks sonore etc...)
+        <div class="home-container10">
+            <div data-role="Header" class="home-navbar-container">
+                <div class="home-navbar">
+                    <span class="Card-Heading home-heading1">
+                        LUCQ SAMUEL - Game Programmer & Game Designer
+                    </span>
+                    <div class="home-links-container1">
+                        <span class="home-link1 Navbar-Link">About</span>
+                        <span class="home-link2 Navbar-Link">Portofolio</span>
+                        <span class="Navbar-Link">Contact</span>
+                    </div>
+                    <div data-role="BurgerMenu" class="home-burger-menu">
+                        <svg viewBox="0 0 1024 1024" class="home-icon10">
+                            <path d="M128 256h768v86h-768v-86zM128 554v-84h768v84h-768zM128 768v-86h768v86h-768z"></path>
+                        </svg>
+                    </div>
+                    <div data-role="MobileMenu" class="home-mobile-menu">
+                        <div class="home-container11">
+                            <span class="Card-Heading home-heading2">Logo</span>
+                            <div data-role="CloseMobileMenu" class="home-close-menu">
+                                <svg viewBox="0 0 1024 1024" class="home-icon12">
+                                    <path d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="home-links-container2">
+                            <span class="home-link4 Navbar-Link">About</span>
+                            <span class="home-link5 Navbar-Link">Experience</span>
+                            <span class="home-link6 Navbar-Link">Portofolio</span>
+                            <span class="Navbar-Link">Contact</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="home-section-separator1"></div>
+            <div class="home-container12">
+                <div class="home-hero">
+                    <div class="home-container13">
+                        <div class="home-hero-text-container">
+                            <h1 class="home-heading3 Section-Heading">
+                                Bienvenue sur mon portfolio !
+                            </h1>
+                            <span class="home-text10 Section-Text">
+                                <span>
+                                    c. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus
+                                    sed augue semper porta. Mauris massa. Vestibulum lacinia
+                                    arcu eget nulla. Class aptent taciti sociosqu ad litora
+                                    torquent per conubia nostra, per inceptos himenaeos.
+                                </span>
+                            </span>
+                            <div class="home-cta-btn-container">
+                                <button type="button" class="home-cta-btn1 Anchor button">
+                                    <span class="home-text12">ABOUT ME</span>
+                                </button>
+                                <button type="button" class="home-cta-btn2 Anchor button">
+                                    <span class="home-text13">MY WORK</span>
+                                </button>
+                                <button type="button" class="home-cta-btn3 Anchor button">
+                                    <span class="home-text14">CONTACT ME</span>
+                                </button>
+                            </div>
+                            <div class="home-container14">
+                                <a href="https://www.linkedin.com/in/samuel-lucq-451b74339/" class="img-link">
+                                    <img src="\images\Logo\Linkedin.png"
+                                         alt="image"
+                                         class="home-image" />
+                                </a>
+                                <a href="https://github.com/Sheepizza" class="img-link">
+                                    <img src="\images\Logo\Github.png"
+                                         alt="image"
+                                         class="home-image" />
+                                </a>
+                                <a href="https://sheepizza.itch.io/" class="img-link">
+                                    <img src="\images\Logo\Itch.png"
+                                         alt="image"
+                                         class="home-image" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <img alt="image"
+                         src="https://play.teleporthq.io/static/svg/default-img.svg"
+                         class="home-image4" />
+                </div>
+            </div>
+            <div class="home-about">
+                <div class="home-heading-container1">
+                    <h2 class="home-text15 Section-Heading">About Me</h2>
+                    <span class="home-text16 Section-Text">
+                        Lorme ipsum dolor sit amet, consectetur adipiscing elit. Integer
+                        nec odio. Praesent libero.
+                    </span>
+                </div>
+                <div class="home-cards-container">
+                    <div class="home-card1">
+                        <div class="home-icon-container1">
+                            <svg viewBox="0 0 1170.2857142857142 1024" class="home-icon14">
+                                <path d="M1170.286 877.714v73.143h-1170.286v-877.714h73.143v804.571h1097.143zM1097.143 164.571v248.571c0 16-19.429 24.571-31.429 12.571l-69.143-69.143-361.714 361.714c-7.429 7.429-18.857 7.429-26.286 0l-133.143-133.143-237.714 237.714-109.714-109.714 334.286-334.286c7.429-7.429 18.857-7.429 26.286 0l133.143 133.143 265.143-265.143-69.143-69.143c-12-12-3.429-31.429 12.571-31.429h248.571c10.286 0 18.286 8 18.286 18.286z"></path>
+                            </svg>
+                        </div>
+                        <div class="home-content-container1">
+                            <span class="home-heading4 Card-Heading">Diagrams</span>
+                            <span class="home-text17 Card-Text">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Integer nec odio. Praesent libero. Sed cursus ante dapibus
+                                diam.c Sed nisi. Nulla quis sem at nibh elementum imperdiet.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="home-card2">
+                        <div class="home-icon-container2">
+                            <svg viewBox="0 0 1024 1024" class="home-icon16">
+                                <path d="M810 128q34 0 60 26t26 60v256h-214l44-172-172 44v-214h256zM726 726l-44-172h214v256q0 34-26 60t-60 26h-256v-214zM342 554l-44 172 172-44v214h-256q-34 0-60-26t-26-60v-256h214zM128 214q0-34 26-60t60-26h256v214l-172-44 44 172h-214v-256z"></path>
+                            </svg>
+                        </div>
+                        <div class="home-content-container2">
+                            <span class="home-heading5 Card-Heading">Wireframes</span>
+                            <span class="home-text18 Card-Text">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Integer nec odio. Praesent libero. Sed cursus ante dapibus
+                                diam.c Sed nisi. Nulla quis sem at nibh elementum imperdiet.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="home-card3">
+                        <div class="home-icon-container3">
+                            <svg viewBox="0 0 865.7188571428571 1024" class="home-icon18">
+                                <path d="M207.429 877.714l52-52-134.286-134.286-52 52v61.143h73.143v73.143h61.143zM506.286 347.429c0-7.429-5.143-12.571-12.571-12.571-3.429 0-6.857 1.143-9.714 4l-309.714 309.714c-2.857 2.857-4 6.286-4 9.714 0 7.429 5.143 12.571 12.571 12.571 3.429 0 6.857-1.143 9.714-4l309.714-309.714c2.857-2.857 4-6.286 4-9.714zM475.429 237.714l237.714 237.714-475.429 475.429h-237.714v-237.714zM865.714 292.571c0 19.429-8 38.286-21.143 51.429l-94.857 94.857-237.714-237.714 94.857-94.286c13.143-13.714 32-21.714 51.429-21.714s38.286 8 52 21.714l134.286 133.714c13.143 13.714 21.143 32.571 21.143 52z"></path>
+                            </svg>
+                        </div>
+                        <div class="home-content-container3">
+                            <span class="home-heading6 Card-Heading">Design</span>
+                            <span class="home-text19 Card-Text">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Integer nec odio. Praesent libero. Sed cursus ante dapibus
+                                diam.c Sed nisi. Nulla quis sem at nibh elementum imperdiet.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="home-projects">
+                <div class="home-max-content-width-container">
+                    <div class="home-projects-heading-container">
+                        <h1 class="Section-Heading projects-text">My Projects</h1>
+                    </div>
+                    <div class="content-container-left">
+                        <div class="content-resume-container">
+                            <h1 class="content-project-title">Heading</h1>
+                            <span class="content-project-resume">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Integer nec odio. Praesent libero. Sed cursus ante dapibus
+                                diam.c Sed nisi. Nulla quis sem at nibh
+                                elementumimperdiet.Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit. Integer nec odio. Praesent libero. Sed cursus
+                                ante dapibus diam.c Sed nisi. Nulla quis sem at nibh
+                                elementumimperdiet.
+                            </span>
+                            <div class="content-features-container">
+                                <div class="content-project-links">
+                                    <a href="https://github.com/Sheepizza" class="content-project-anchor">
+                                        <img src="\images\Logo\Github.png"
+                                             alt="image"
+                                             class="content-project-image-anchor" />
+                                    </a>
+                                    <a href="https://github.com/Sheepizza" class="content-project-anchor">
+                                        <img src="\images\Logo\Itch.png"
+                                             alt="image"
+                                             class="content-project-image-anchor" />
+                                    </a>
+                                </div>
+                                <div class="content-project-spec">
+                                    <img src="\images\Logo\Unity.png"
+                                         alt="image"
+                                         class="content-project-image" />
+                                    <img src="\images\Logo\csharp.png"
+                                         alt="image"
+                                         class="content-project-image" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-carousel-container"></div>
+                    </div>
+                    <div class="content-container-right">
+                        <div class="content-carousel-container"></div>
+                        <div class="content-resume-container">
+                            <h1 class="content-project-title">Heading</h1>
+                            <span class="content-project-resume">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Integer nec odio. Praesent libero. Sed cursus ante dapibus
+                                diam.c Sed nisi. Nulla quis sem at nibh
+                                elementumimperdiet.Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit. Integer nec odio. Praesent libero. Sed cursus
+                                ante dapibus diam.c Sed nisi. Nulla quis sem at nibh
+                                elementumimperdiet.
+                            </span>
+                            <div class="content-features-container">
+                                <div class="content-project-links">
+                                    <a href="https://github.com/Sheepizza" class="content-project-anchor">
+                                        <img src="\images\Logo\Github.png"
+                                             alt="image"
+                                             class="content-project-image-anchor" />
+                                    </a>
+                                    <a href="https://github.com/Sheepizza" class="content-project-anchor">
+                                        <img src="\images\Logo\Itch.png"
+                                             alt="image"
+                                             class="content-project-image-anchor" />
+                                    </a>
+                                </div>
+                                <div class="content-project-spec">
+                                    <img src="\images\Logo\Unity.png"
+                                         alt="image"
+                                         class="content-project-image" />
+                                    <img src="\images\Logo\csharp.png"
+                                         alt="image"
+                                         class="content-project-image" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="home-section-separator3"></div>
+            <div class="contact-container">
+                <iframe src="https://www.google.com/maps?q=Lille, France&amp;output=embed"
+                        address="Lille, France"
+                        class="home-google-maps"></iframe>
+                <div class="form-container">
+                    <div class="form-heading">
+                        <h1 class="home-text24 Section-Heading">
+                            Get our guide to crafting digital products
+                        </h1>
+                        <span class="Section-Text home-text25">
+                            We will send you our monthly freebies on your email. We will not
+                            share your email address or use it for promotional goals.
+                        </span>
+                    </div>
+                    <form id="contact-form">
+                        <div class="user-form-container">
+                            <input type="email"
+                                   name="email"
+                                   placeholder="Votre e-mail"
+                                   class="home-textinput1 Section-Text input" />
+                            <input type="text"
+                                   name="name"
+                                   placeholder="Nom"
+                                   class="home-textinput2 Section-Text input" />
+                        </div>
+                        <input type="text"
+                               name="title"
+                               placeholder="Objet"
+                               class="home-textinput3 Section-Text input" />
+                        <textarea placeholder="Message"
+                                  name="message"
+                                  class="home-textinput4 Section-Text input"></textarea>
+                        <button class="home-button Anchor button" id="submit-btn">SEND</button>
+                    </form>
+                </div>
+            </div>
+            <div class="home-section-separator4"></div>
+            <div class="home-footer-container">
+                <div class="home-footer">
+                    <div class="home-social-links">
+                        <svg viewBox="0 0 950.8571428571428 1024" class="home-icon20">
+                            <path d="M925.714 233.143c-25.143 36.571-56.571 69.143-92.571 95.429 0.571 8 0.571 16 0.571 24 0 244-185.714 525.143-525.143 525.143-104.571 0-201.714-30.286-283.429-82.857 14.857 1.714 29.143 2.286 44.571 2.286 86.286 0 165.714-29.143 229.143-78.857-81.143-1.714-149.143-54.857-172.571-128 11.429 1.714 22.857 2.857 34.857 2.857 16.571 0 33.143-2.286 48.571-6.286-84.571-17.143-148-91.429-148-181.143v-2.286c24.571 13.714 53.143 22.286 83.429 23.429-49.714-33.143-82.286-89.714-82.286-153.714 0-34.286 9.143-65.714 25.143-93.143 90.857 112 227.429 185.143 380.571 193.143-2.857-13.714-4.571-28-4.571-42.286 0-101.714 82.286-184.571 184.571-184.571 53.143 0 101.143 22.286 134.857 58.286 41.714-8 81.714-23.429 117.143-44.571-13.714 42.857-42.857 78.857-81.143 101.714 37.143-4 73.143-14.286 106.286-28.571z"></path>
+                        </svg><svg viewBox="0 0 877.7142857142857 1024" class="home-icon22">
+                            <path d="M713.143 73.143c90.857 0 164.571 73.714 164.571 164.571v548.571c0 90.857-73.714 164.571-164.571 164.571h-107.429v-340h113.714l17.143-132.571h-130.857v-84.571c0-38.286 10.286-64 65.714-64l69.714-0.571v-118.286c-12-1.714-53.714-5.143-101.714-5.143-101.143 0-170.857 61.714-170.857 174.857v97.714h-114.286v132.571h114.286v340h-304c-90.857 0-164.571-73.714-164.571-164.571v-548.571c0-90.857 73.714-164.571 164.571-164.571h548.571z"></path>
+                        </svg><svg viewBox="0 0 877.7142857142857 1024" class="home-icon24">
+                            <path d="M585.143 512c0-80.571-65.714-146.286-146.286-146.286s-146.286 65.714-146.286 146.286 65.714 146.286 146.286 146.286 146.286-65.714 146.286-146.286zM664 512c0 124.571-100.571 225.143-225.143 225.143s-225.143-100.571-225.143-225.143 100.571-225.143 225.143-225.143 225.143 100.571 225.143 225.143zM725.714 277.714c0 29.143-23.429 52.571-52.571 52.571s-52.571-23.429-52.571-52.571 23.429-52.571 52.571-52.571 52.571 23.429 52.571 52.571zM438.857 152c-64 0-201.143-5.143-258.857 17.714-20 8-34.857 17.714-50.286 33.143s-25.143 30.286-33.143 50.286c-22.857 57.714-17.714 194.857-17.714 258.857s-5.143 201.143 17.714 258.857c8 20 17.714 34.857 33.143 50.286s30.286 25.143 50.286 33.143c57.714 22.857 194.857 17.714 258.857 17.714s201.143 5.143 258.857-17.714c20-8 34.857-17.714 50.286-33.143s25.143-30.286 33.143-50.286c22.857-57.714 17.714-194.857 17.714-258.857s5.143-201.143-17.714-258.857c-8-20-17.714-34.857-33.143-50.286s-30.286-25.143-50.286-33.143c-57.714-22.857-194.857-17.714-258.857-17.714zM877.714 512c0 60.571 0.571 120.571-2.857 181.143-3.429 70.286-19.429 132.571-70.857 184s-113.714 67.429-184 70.857c-60.571 3.429-120.571 2.857-181.143 2.857s-120.571 0.571-181.143-2.857c-70.286-3.429-132.571-19.429-184-70.857s-67.429-113.714-70.857-184c-3.429-60.571-2.857-120.571-2.857-181.143s-0.571-120.571 2.857-181.143c3.429-70.286 19.429-132.571 70.857-184s113.714-67.429 184-70.857c60.571-3.429 120.571-2.857 181.143-2.857s120.571-0.571 181.143 2.857c70.286 3.429 132.571 19.429 184 70.857s67.429 113.714 70.857 184c3.429 60.571 2.857 120.571 2.857 181.143z"></path>
+                        </svg>
+                    </div>
+                    <span class="home-text26">Lucq Samuel</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <section class="content">
-        <button class="btn" id="prev"><</button>
-        <div id="carousel"></div>
-        <button class="btn" id="next">></button>
-        <div id="video-overlay"></div>
-    </section>
+    <script defer=""
+            src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
 
-    <button id="scroll-btn">↓</button>
-    <footer>
-        Lucq Samuel - 2025
-    </footer>
+    <script src="Main.js"></script>
 
-    <script type="module" src="main.js"></script>
-    <script src="content.js"></script>
 </body>
 </html>
