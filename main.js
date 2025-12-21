@@ -2,6 +2,8 @@ const PUBLIC_KEY = 'Yf9AYCKGo5UVfAPSX';
 const SERVICE_ID = 'service_2fnx4dk';
 const TEMPLATE_ID = 'template_1gxlqsv';
 
+emailjs.init(PUBLIC_KEY);
+
 const form = document.getElementById('contact-form');
 const submitBtn = document.getElementById('submit-btn');
 
