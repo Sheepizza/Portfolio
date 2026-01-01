@@ -150,9 +150,10 @@ function updateCarousel(projectName) {
     });
 }
 
-AddCarouselPages("tt", 0);
-AddCarouselPages("alien", 1);
-AddCarouselPages("ff", 2);
+//AddCarouselPages("tt", 0);
+AddCarouselPages("tt", 1);
+AddCarouselPages("alien", 2);
+AddCarouselPages("ff", 3);
 
 Array.from(document.getElementsByClassName("prev")).forEach(btn => {
     btn.addEventListener("click", (event) => {
