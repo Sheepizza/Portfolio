@@ -33,6 +33,13 @@ form.addEventListener('submit', function (e) {
 
 const carousels = document.getElementsByClassName("carousel");
 
+const Data = [
+    { src: "Data_Datas/GP.mp4" },
+    { src: "Data_Datas/R&D.mp4" },
+    { src: "Data_Datas/CT.mp4" },
+    { index: 0 },
+];
+
 const FastForge = [
     { src: "FastForge_Datas/R&D.mp4" },
     { src: "FastForge_Datas/CT.mp4" },
@@ -55,6 +62,7 @@ const TinyTale = [
 ];
 
 const projects = {
+    "data": Data,
     "ff": FastForge,
     "alien": Alien,
     "tt": TinyTale,
@@ -150,7 +158,7 @@ function updateCarousel(projectName) {
     });
 }
 
-//AddCarouselPages("tt", 0);
+AddCarouselPages("data", 0);
 AddCarouselPages("tt", 1);
 AddCarouselPages("alien", 2);
 AddCarouselPages("ff", 3);

@@ -685,6 +685,11 @@
     justify-content: center;
 }
 
+.video-container {
+    width: 50%;
+    height: 50%;
+}
+
 .content-project-anchor {
     display: block;
     width: auto;
