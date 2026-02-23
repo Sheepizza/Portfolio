@@ -61,11 +61,19 @@ const TinyTale = [
     { index: 0 },
 ];
 
+const About = [
+    { src: "Annexe_Datas/About1.mp4" },
+    { src: "Annexe_Datas/About2.mp4" },
+    { src: "Annexe_Datas/About4.mp4" },
+    { index: 0 },
+];
+
 const projects = {
     "data": Data,
     "ff": FastForge,
     "alien": Alien,
     "tt": TinyTale,
+    "about": About,
 };
 
 function AddCarouselPages(projectName, index) {
@@ -162,6 +170,7 @@ AddCarouselPages("data", 0);
 AddCarouselPages("tt", 1);
 AddCarouselPages("alien", 2);
 AddCarouselPages("ff", 3);
+AddCarouselPages("about", 4);
 
 Array.from(document.getElementsByClassName("prev")).forEach(btn => {
     btn.addEventListener("click", (event) => {
