@@ -884,8 +884,16 @@
         cursor: pointer;
     }
 
+.mobile-only{
+    display: none;
+}
+
 @media (max-width: 768px) {
-        .home-heading1 {
+    .mobile-only {
+        display: block;
+    }
+
+    .home-heading1 {
         font-size: 18px;
         text-align: center;
     }
